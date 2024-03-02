@@ -1,4 +1,4 @@
-package z3roco01.nekocli.network.serialization
+package z3roco01.nekocli.serialization
 
 import kotlinx.serialization.Serializable
 import java.sql.Timestamp

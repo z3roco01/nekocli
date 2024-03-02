@@ -2,7 +2,7 @@ package z3roco01.nekocli.network
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
-import z3roco01.nekocli.network.serialization.SiteInfo
+import z3roco01.nekocli.serialization.SiteInfo
 import java.io.BufferedReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -19,7 +19,12 @@ class NekowebApiConnection(Key: String) {
         parameters.set("pathname", path)
         parameters.set("isFolder", isFolder.toString())
 
-        postUrlEncoded(FILES_BASE + CREATE_ENDPOINT, parameters)
+        try {
+            postUrlEncoded(FILES_BASE + CREATE_ENDPOINT, parameters)
+        }catch(e: Exception) {
+            return "couldnt create ${if(isFolder) "folder" else "file"} $path 3:"
+        }
+
 
         return "created ${if(isFolder) "folder" else "file"} $path !! :D"
     }
@@ -28,9 +33,13 @@ class NekowebApiConnection(Key: String) {
         val parameters = FormParameters()
         parameters.set("pathname", path)
 
-        postUrlEncoded(FILES_BASE + DELETE_ENDPOINT, parameters)
+        try{
+            postUrlEncoded(FILES_BASE + DELETE_ENDPOINT, parameters)
+        }catch(e: Exception) {
+            return "couldnt delete $path D:"
+        }
 
-        return "deleted $path 3:"
+        return "deleted $path :3c"
     }
 
     fun rename(path: String, newpath: String): String {
@@ -38,7 +47,11 @@ class NekowebApiConnection(Key: String) {
         parameters.set("pathname", path)
         parameters.set("newpathname", newpath)
 
-        postUrlEncoded(FILES_BASE + RENAME_ENDPOINT, parameters)
+        try {
+            postUrlEncoded(FILES_BASE + RENAME_ENDPOINT, parameters)
+        }catch(e: Exception) {
+            return "couldnt rename $path to $newpath :("
+        }
 
         return "renamed $path to $newpath !! :3"
     }
@@ -47,14 +60,21 @@ class NekowebApiConnection(Key: String) {
         val parameters = FormParameters()
         parameters.set("pathname", path)
         parameters.set("content", content)
-
-        postMultipartFormData(FILES_BASE + EDIT_ENDPOINT, parameters)
+        try{
+            postMultipartFormData(FILES_BASE + EDIT_ENDPOINT, parameters)
+        }catch(e: Exception) {
+            return "couldnt edit $path :("
+    }
 
         return "edited $path !!! :p"
     }
 
     fun readFolder(path: String): JsonArray {
-        return get<JsonArray>(FILES_BASE + READ_FOLDER_ENDPOINT + "?pathname=" + path)
+        try {
+            return get<JsonArray>(FILES_BASE + READ_FOLDER_ENDPOINT + "?pathname=" + path)
+        }catch(e: Exception) {
+            throw e
+        }
     }
 
     private fun postUrlEncoded(path: String, parameters: FormParameters): String {
