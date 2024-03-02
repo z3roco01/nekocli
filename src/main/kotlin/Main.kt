@@ -43,7 +43,7 @@ fun printHelp() {
             "\tcreatefile(c) <path>: creates file with path and name <path>\n" +
             "\tcreatefolder(cf) <path>: creates folder with path and name <path>\n" +
             "\tdelete(d) <path>: deletes file/folder at <path>\n" +
-            "\trename(r) <original path> <new path>: moves file/folder at <original path> to <new path>\n" +
+            "\trename(r) <old path> <new path>: moves <old path> to <new path>\n" +
             "\tedit(e) <path> <local file>: uploads data from <local file> into file at <path>\n" +
             "\tfolderlist(fl) <path>: list all files/folders in <path>")
 }
