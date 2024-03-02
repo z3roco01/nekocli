@@ -7,18 +7,25 @@ import kotlin.io.path.Path
 import kotlin.io.path.createDirectory
 import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
+import kotlin.io.path.exists
+import kotlin.io.path.notExists
 
 fun main(args: Array<String>) {
     if((args.size == 1 && (args.get(0) == "help" || args.get(0) == "h")) || args.size < 2) {
         printHelp()
     }else {
-        val configPath = System.getProperty("user.home")+"/.config/nekocli/config.json"
+        val configPath = System.getProperty("user.home")+"/.config/nekocli/"
         if(args.get(0) == "login") {
-            Path(configPath).createDirectory()
+            var confPath = Path(configPath)
+            if(Path(configPath).notExists())
+                confPath.createDirectory()
+
             val confFile = File(configPath+"/config.json")
 
-            if(!confFile.createNewFile()) {
-                println("couldnt make the config file 3:")
+            confPath = Path(configPath + "/config.json")
+            if(confPath.notExists()) {
+                if(!confFile.createNewFile())
+                    println("couldnt make the config file 3:")
             }
 
             confFile.writeText(Json.encodeToString(ConfigFile(args.get(1))))
